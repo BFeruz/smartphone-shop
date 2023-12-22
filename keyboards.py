@@ -1,5 +1,5 @@
 from telegram import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
-from db import get_brends
+from db import get_brends, get_phones_by_brend
 from pprint import pprint
 
 
@@ -22,6 +22,20 @@ def brends_keyboard():
 
     if row:
         keyboards_btns.append(row)
+
+    return InlineKeyboardMarkup(
+        keyboards_btns
+    )
+
+def phones_keyboard(brend: str):
+    phones = get_phones_by_brend(brend=brend)
+    keyboards_btns = []
+    for phone in phones:
+        btn = InlineKeyboardButton(
+            text=phone['name'],
+            callback_data=f'phone:{brend}-{phone.doc_id}'
+        )
+        keyboards_btns.append([btn])
 
     return InlineKeyboardMarkup(
         keyboards_btns
